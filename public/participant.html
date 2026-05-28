@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>QuizBlast – Join</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+<div id="app">
+
+  <!-- Join -->
+  <div id="screen-join" class="screen active">
+    <h1 class="logo">QuizBlast</h1>
+    <input id="input-pin"      type="number" placeholder="Room PIN"  class="input" maxlength="6" />
+    <input id="input-nickname" type="text"   placeholder="Nickname"  class="input" maxlength="16" />
+    <button id="btn-join" class="btn btn-primary btn-lg">Join Game</button>
+    <p id="join-error" class="error-msg"></p>
+  </div>
+
+  <!-- Waiting in lobby -->
+  <div id="screen-waiting" class="screen">
+    <div class="waiting-icon">🎮</div>
+    <h2>You're in!</h2>
+    <p id="waiting-name" class="waiting-name"></p>
+    <p class="hint">Waiting for the host to start…</p>
+  </div>
+
+  <!-- Question -->
+  <div id="screen-question" class="screen">
+    <div class="question-header">
+      <span id="q-counter" class="q-counter"></span>
+      <div class="timer-bar"><div id="q-timer-fill" class="timer-fill"></div></div>
+    </div>
+    <h2 id="q-text" class="question-text"></h2>
+    <div id="q-options" class="options-grid"></div>
+  </div>
+
+  <!-- Feedback after answering -->
+  <div id="screen-feedback" class="screen">
+    <div id="feedback-icon" class="feedback-icon"></div>
+    <h2 id="feedback-text"></h2>
+    <p id="feedback-points" class="feedback-points"></p>
+    <p class="hint">Waiting for results…</p>
+  </div>
+
+  <!-- Leaderboard between questions -->
+  <div id="screen-leaderboard" class="screen">
+    <h2>Leaderboard</h2>
+    <div id="leaderboard-list" class="leaderboard"></div>
+    <p class="hint">Waiting for next question…</p>
+  </div>
+
+  <!-- Game Over -->
+  <div id="screen-gameover" class="screen">
+    <h2>Final Scores</h2>
+    <div id="final-leaderboard" class="leaderboard"></div>
+  </div>
+
+</div>
+<script src="/socket.io/socket.io.js"></script>
+<script src="participant.js"></script>
+</body>
+</html>

@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>QuizBlast – Presenter</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+<div id="app">
+
+  <!-- Join -->
+  <div id="screen-join" class="screen active presenter-screen">
+    <h1 class="logo">QuizBlast</h1>
+    <p class="hint">Presenter / projector view</p>
+    <input id="input-pin" type="number" class="input" placeholder="Room PIN" maxlength="6" />
+    <button id="btn-join" class="btn btn-primary btn-lg">Connect</button>
+    <p id="join-error" class="error-msg"></p>
+  </div>
+
+  <!-- Lobby: shown on the big screen while players join -->
+  <div id="screen-lobby" class="screen presenter-screen">
+    <p class="hint">Players, go to <strong>quizblast.app</strong> and enter</p>
+    <div id="lobby-pin" class="pin-display pin-xl"></div>
+    <p id="participant-count" class="participant-count">0 players joined</p>
+    <div id="participant-list" class="participant-list"></div>
+    <p class="hint">Waiting for host to start…</p>
+  </div>
+
+  <!-- Question: shown while a question is live -->
+  <div id="screen-question" class="screen presenter-screen">
+    <div class="question-header">
+      <span id="q-counter" class="q-counter"></span>
+      <div class="timer-bar"><div id="q-timer-fill" class="timer-fill"></div></div>
+    </div>
+    <h2 id="q-text" class="question-text"></h2>
+    <div id="q-options" class="options-grid"></div>
+    <p id="answer-count" class="answer-count presenter-answer-count">Answers: 0</p>
+  </div>
+
+  <!-- Leaderboard between questions -->
+  <div id="screen-leaderboard" class="screen presenter-screen">
+    <h2>Leaderboard</h2>
+    <div id="leaderboard-list" class="leaderboard"></div>
+    <p class="hint">Waiting for next question…</p>
+  </div>
+
+  <!-- Final scores -->
+  <div id="screen-gameover" class="screen presenter-screen">
+    <h2>Final Scores</h2>
+    <div id="final-leaderboard" class="leaderboard"></div>
+  </div>
+
+</div>
+<script src="/socket.io/socket.io.js"></script>
+<script src="presenter.js"></script>
+</body>
+</html>

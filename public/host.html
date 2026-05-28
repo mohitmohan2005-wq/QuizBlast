@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>QuizBlast – Host</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+<div id="app">
+
+  <!-- Setup -->
+  <div id="screen-setup" class="screen active">
+    <h1 class="logo">QuizBlast</h1>
+    <p class="hint">Host a live quiz for your group</p>
+    <button id="btn-create" class="btn btn-primary btn-lg">Create Room</button>
+  </div>
+
+  <!-- Lobby -->
+  <div id="screen-lobby" class="screen">
+    <h2>Room PIN</h2>
+    <div id="pin-display" class="pin-display"></div>
+    <p class="hint">Share this PIN with participants</p>
+    <div id="participant-list" class="participant-list">
+      <span class="hint">Waiting for players…</span>
+    </div>
+
+    <!-- Question builder -->
+    <div class="qform">
+      <p class="qform-title">Add Questions</p>
+      <input id="qf-text" type="text" class="input" placeholder="Question text" />
+      <div class="qform-options">
+        <input id="qf-opt0" type="text" class="input input-a" placeholder="▲  Option A" />
+        <input id="qf-opt1" type="text" class="input input-b" placeholder="●  Option B" />
+        <input id="qf-opt2" type="text" class="input input-c" placeholder="◆  Option C" />
+        <input id="qf-opt3" type="text" class="input input-d" placeholder="■  Option D" />
+      </div>
+      <div class="qform-row">
+        <select id="qf-correct" class="input">
+          <option value="0">✓ Correct: A</option>
+          <option value="1">✓ Correct: B</option>
+          <option value="2">✓ Correct: C</option>
+          <option value="3">✓ Correct: D</option>
+        </select>
+        <input id="qf-duration" type="number" class="input input-sm" value="20" min="5" max="120" placeholder="Sec" />
+      </div>
+      <button id="btn-add-q" class="btn btn-secondary">+ Add Question</button>
+      <p id="qf-error" class="error-msg"></p>
+      <div id="question-list" class="question-list"></div>
+    </div>
+
+    <button id="btn-start" class="btn btn-primary btn-lg">Start Quiz</button>
+  </div>
+
+  <!-- Question (host view) -->
+  <div id="screen-question" class="screen">
+    <div class="question-header">
+      <span id="q-counter" class="q-counter"></span>
+      <div class="timer-bar"><div id="q-timer-fill" class="timer-fill"></div></div>
+    </div>
+    <h2 id="q-text" class="question-text"></h2>
+    <div id="q-options" class="options-grid host-options"></div>
+    <p id="answer-count" class="answer-count">Answers: 0</p>
+    <button id="btn-end-q" class="btn btn-secondary">Show Results Early</button>
+  </div>
+
+  <!-- Leaderboard -->
+  <div id="screen-leaderboard" class="screen">
+    <h2>Leaderboard</h2>
+    <div id="leaderboard-list" class="leaderboard"></div>
+    <button id="btn-next" class="btn btn-primary btn-lg">Next Question</button>
+  </div>
+
+  <!-- Game Over -->
+  <div id="screen-gameover" class="screen">
+    <h2>Final Scores</h2>
+    <div id="final-leaderboard" class="leaderboard"></div>
+  </div>
+
+</div>
+<script src="/socket.io/socket.io.js"></script>
+<script src="host.js"></script>
+</body>
+</html>
