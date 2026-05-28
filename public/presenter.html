@@ -30,7 +30,10 @@
   <!-- Question: shown while a question is live -->
   <div id="screen-question" class="screen presenter-screen">
     <div class="question-header">
-      <span id="q-counter" class="q-counter"></span>
+      <div class="q-header-top">
+        <span id="q-counter" class="q-counter"></span>
+        <span id="q-timer-text" class="timer-text">—</span>
+      </div>
       <div class="timer-bar"><div id="q-timer-fill" class="timer-fill"></div></div>
     </div>
     <h2 id="q-text" class="question-text"></h2>
@@ -49,6 +52,18 @@
   <div id="screen-gameover" class="screen presenter-screen">
     <h2>Final Scores</h2>
     <div id="final-leaderboard" class="leaderboard"></div>
+  </div>
+
+  <!-- Slide display (big screen) -->
+  <div id="screen-slide" class="screen presenter-screen">
+    <h2 id="slide-title-display" class="slide-title"></h2>
+    <p  id="slide-body-display"  class="slide-body"></p>
+  </div>
+
+  <!-- Q&A live feed (big screen) -->
+  <div id="screen-qna" class="screen presenter-screen">
+    <h2>Q&amp;A</h2>
+    <div id="qna-list-presenter" class="qna-list"></div>
   </div>
 
 </div>

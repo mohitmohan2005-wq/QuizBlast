@@ -675,3 +675,197 @@ select.input option {
   .presenter-screen .question-text { font-size: 1.3rem; }
   .presenter-screen .option        { min-height: 72px; font-size: 1rem; }
 }
+
+/* ─── Timer: numeric countdown ──────────────────────────────── */
+
+/* Row that holds the question counter and the number on the right */
+.q-header-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+}
+
+/* The big digit that counts down */
+.timer-text {
+  font-size: 1.7rem;
+  font-weight: 900;
+  color: var(--text);
+  min-width: 48px;
+  text-align: right;
+  transition: color .25s;
+  line-height: 1;
+}
+
+/* Turns red and pulses when ≤ 5 seconds remain */
+.timer-text.timer-urgent {
+  color: var(--red);
+  animation: timerPulse .45s ease-in-out infinite;
+}
+@keyframes timerPulse {
+  0%, 100% { transform: scale(1); }
+  50%       { transform: scale(1.2); }
+}
+
+/* Presenter gets a larger digit to be readable on a projector */
+.presenter-screen .timer-text { font-size: 2.6rem; min-width: 64px; }
+
+/* ─── Podium leaderboard ─────────────────────────────────────── */
+
+/* First place card is slightly taller and bigger than the rest */
+.leaderboard-row.top-1 {
+  padding: 20px 24px;
+  font-size: 1.15rem;
+}
+
+/* Emoji medals need more room than a one-digit number */
+.leaderboard-row.top-1 .rank,
+.leaderboard-row.top-2 .rank,
+.leaderboard-row.top-3 .rank {
+  font-size: 1.6rem;
+  width: 44px;
+}
+
+/* ─── Participant: "Look at the presenter screen" block ──────── */
+
+.look-at-screen {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  padding: 18px 20px;
+  background: rgba(255,255,255,.05);
+  border: 1px solid rgba(255,255,255,.1);
+  border-radius: 16px;
+  width: 100%;
+}
+
+.look-eye {
+  font-size: 2.8rem;
+  line-height: 1;
+  animation: eyePulse 2s ease-in-out infinite;
+}
+
+.look-at-screen p {
+  font-size: 1rem;
+  font-weight: 800;
+  color: var(--text);
+  text-align: center;
+}
+
+@keyframes eyePulse {
+  0%, 100% { transform: scale(1)    rotate(0deg); }
+  30%       { transform: scale(1.25) rotate(-8deg); }
+  70%       { transform: scale(1.25) rotate(8deg); }
+}
+
+/* ─── Restart button ─────────────────────────────────────────── */
+
+.btn-restart {
+  background: linear-gradient(135deg, #1368ce 0%, #0d4b99 100%);
+  color: #fff;
+  box-shadow: 0 6px 22px rgba(19,104,206,.38);
+}
+.btn-restart:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 12px 32px rgba(19,104,206,.52);
+}
+.btn-restart:active { transform: translateY(0) scale(.97); }
+
+/* ─── Host action row (slide / Q&A buttons) ──────────────────── */
+
+.host-actions-row {
+  display: flex;
+  gap: 10px;
+  width: 100%;
+  justify-content: center;
+  flex-wrap: wrap;
+  margin-bottom: 6px;
+}
+
+/* ─── Outline button variant ─────────────────────────────────── */
+
+.btn-outline {
+  background: transparent;
+  color: var(--text);
+  border: 2px solid rgba(255,255,255,.3);
+}
+.btn-outline:hover {
+  background: rgba(255,255,255,.08);
+  border-color: rgba(255,255,255,.55);
+}
+
+/* ─── Slide screens ──────────────────────────────────────────── */
+
+.input-textarea {
+  resize: vertical;
+  min-height: 90px;
+  font-family: inherit;
+  line-height: 1.5;
+}
+
+.slide-title {
+  font-size: clamp(1.6rem, 4vw, 2.8rem);
+  font-weight: 900;
+  text-align: center;
+  margin-bottom: 18px;
+  color: var(--text);
+  line-height: 1.2;
+}
+
+.slide-body {
+  font-size: clamp(1rem, 2.5vw, 1.5rem);
+  font-weight: 500;
+  text-align: center;
+  color: rgba(255,255,255,.85);
+  white-space: pre-wrap;
+  max-width: 70ch;
+  margin: 0 auto;
+  line-height: 1.6;
+}
+
+/* ─── Q&A list ───────────────────────────────────────────────── */
+
+.qna-list {
+  width: 100%;
+  max-height: 420px;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding-right: 4px;
+}
+
+.qna-list::-webkit-scrollbar { width: 4px; }
+.qna-list::-webkit-scrollbar-thumb { background: rgba(255,255,255,.2); border-radius: 2px; }
+
+.qna-item {
+  background: rgba(255,255,255,.07);
+  border: 1px solid rgba(255,255,255,.1);
+  border-radius: 12px;
+  padding: 12px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  animation: fadeSlideIn .25s ease;
+}
+
+@keyframes fadeSlideIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.qna-nickname {
+  font-size: .78rem;
+  font-weight: 800;
+  color: var(--accent);
+  text-transform: uppercase;
+  letter-spacing: .04em;
+}
+
+.qna-question {
+  font-size: 1rem;
+  font-weight: 500;
+  color: var(--text);
+  line-height: 1.45;
+}

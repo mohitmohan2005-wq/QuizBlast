@@ -29,7 +29,10 @@
   <!-- Question -->
   <div id="screen-question" class="screen">
     <div class="question-header">
-      <span id="q-counter" class="q-counter"></span>
+      <div class="q-header-top">
+        <span id="q-counter" class="q-counter"></span>
+        <span id="q-timer-text" class="timer-text">—</span>
+      </div>
       <div class="timer-bar"><div id="q-timer-fill" class="timer-fill"></div></div>
     </div>
     <h2 id="q-text" class="question-text"></h2>
@@ -48,13 +51,33 @@
   <div id="screen-leaderboard" class="screen">
     <h2>Leaderboard</h2>
     <div id="leaderboard-list" class="leaderboard"></div>
-    <p class="hint">Waiting for next question…</p>
+    <div class="look-at-screen">
+      <span class="look-eye">👀</span>
+      <p>Look at the presenter screen!</p>
+    </div>
   </div>
 
   <!-- Game Over -->
   <div id="screen-gameover" class="screen">
     <h2>Final Scores</h2>
     <div id="final-leaderboard" class="leaderboard"></div>
+  </div>
+
+  <!-- Slide: participant just looks at the presenter screen -->
+  <div id="screen-slide" class="screen">
+    <div class="look-at-screen">
+      <span class="look-eye">👀</span>
+      <p>Look at the presenter screen!</p>
+    </div>
+  </div>
+
+  <!-- Q&A: participant submits a question -->
+  <div id="screen-qna" class="screen">
+    <h2>Q&amp;A Session</h2>
+    <p class="hint">Submit a question for the host</p>
+    <textarea id="qa-input" class="input input-textarea" placeholder="Type your question…" rows="4" maxlength="300"></textarea>
+    <button id="btn-qa-submit" class="btn btn-primary btn-lg">Submit Question</button>
+    <p id="qa-status" class="hint"></p>
   </div>
 
 </div>

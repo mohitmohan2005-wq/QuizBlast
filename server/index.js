@@ -139,7 +139,10 @@ io.on('connection', (socket) => {
       currentQuestion: -1,
       questionStartTime: null,
       answers:         {},
-      timer:           null
+      timer:           null,
+      prevState:       null,
+      currentSlide:    null,
+      qaItems:         []
     };
 
     socket.join(pin);
@@ -208,7 +211,7 @@ io.on('connection', (socket) => {
     const nextIndex = room.currentQuestion + 1;
 
     if (nextIndex >= room.questions.length) {
-      room.state = 'finished';
+      room.state = 'gameOver';
       io.to(pin).emit('game:over', { leaderboard: getLeaderboard(room) });
       return;
     }
@@ -222,21 +225,23 @@ io.on('connection', (socket) => {
 
     // Host: sees which answer is correct
     socket.emit('host:question', {
-      question: q.question,
-      options:  q.options,
-      correct:  q.correct,
-      duration: q.duration,
-      index:    nextIndex,
-      total:    room.questions.length
+      question:  q.question,
+      options:   q.options,
+      correct:   q.correct,
+      duration:  q.duration,
+      index:     nextIndex,
+      total:     room.questions.length,
+      startTime: room.questionStartTime  // epoch ms — lets clients sync the timer bar
     });
 
     // Everyone else in the room (participants + presenters): no correct answer
     socket.to(pin).emit('participant:question', {
-      question: q.question,
-      options:  q.options,
-      duration: q.duration,
-      index:    nextIndex,
-      total:    room.questions.length
+      question:  q.question,
+      options:   q.options,
+      duration:  q.duration,
+      index:     nextIndex,
+      total:     room.questions.length,
+      startTime: room.questionStartTime  // epoch ms — lets clients sync the timer bar
     });
 
     room.timer = setTimeout(() => endQuestion(pin), q.duration * 1000);
@@ -273,12 +278,99 @@ io.on('connection', (socket) => {
     }
   });
 
+  // Host restarts the game: same PIN, same players, same questions — scores reset to 0
+  socket.on('host:restart-game', ({ pin }) => {
+    const room = rooms[pin];
+    if (!room || room.hostId !== socket.id) return;
+
+    clearTimeout(room.timer);
+
+    // Reset every participant's score
+    Object.values(room.participants).forEach(p => { p.score = 0; });
+
+    // Wind back the game state to the beginning
+    room.currentQuestion   = -1;
+    room.state             = 'lobby';
+    room.answers           = {};
+    room.questionStartTime = null;
+    room.prevState         = null;
+    room.currentSlide      = null;
+    room.qaItems           = [];
+
+    // Notify everyone in the room so they return to their waiting/lobby screen
+    io.to(pin).emit('game:restarted', {});
+
+    // Send the current player list to host + presenters
+    emitToHostAndPresenters(room, 'host:participants', {
+      participants: getParticipantList(room)
+    });
+  });
+
   // Host manually ends the current question
   socket.on('host:end-question', ({ pin }) => {
     const room = rooms[pin];
     if (!room || room.hostId !== socket.id) return;
     clearTimeout(room.timer);
     endQuestion(pin);
+  });
+
+  // ── Slide handlers ────────────────────────────────────────────
+
+  socket.on('host:show-slide', ({ pin, title, body }) => {
+    const room = rooms[pin];
+    if (!room || room.hostId !== socket.id) return;
+    room.prevState    = room.state;
+    room.state        = 'slide';
+    room.currentSlide = { title, body };
+    io.to(pin).emit('show:slide', { title, body });
+  });
+
+  socket.on('host:close-slide', ({ pin }) => {
+    const room = rooms[pin];
+    if (!room || room.hostId !== socket.id) return;
+    const prev = room.prevState || 'lobby';
+    room.state        = prev;
+    room.currentSlide = null;
+    if (prev === 'leaderboard') {
+      const isLast = room.currentQuestion >= room.questions.length - 1;
+      io.to(pin).emit('show:leaderboard', { leaderboard: getLeaderboard(room), isLast });
+    } else {
+      io.to(pin).emit('slide:closed', {});
+    }
+  });
+
+  // ── Q&A handlers ──────────────────────────────────────────────
+
+  socket.on('host:start-qna', ({ pin }) => {
+    const room = rooms[pin];
+    if (!room || room.hostId !== socket.id) return;
+    room.prevState = room.state;
+    room.state     = 'qna';
+    room.qaItems   = [];
+    io.to(pin).emit('start:qna', {});
+  });
+
+  socket.on('qa:submit', ({ pin, question }) => {
+    const room = rooms[pin];
+    if (!room || room.state !== 'qna') return;
+    if (!question || !question.trim()) return;
+    const nickname = room.participants[socket.id]?.nickname || 'Anonymous';
+    const item     = { nickname, question: question.trim() };
+    room.qaItems.push(item);
+    emitToHostAndPresenters(room, 'qa:new-item', item);
+  });
+
+  socket.on('host:end-qna', ({ pin }) => {
+    const room = rooms[pin];
+    if (!room || room.hostId !== socket.id) return;
+    const prev = room.prevState || 'lobby';
+    room.state = prev;
+    if (prev === 'leaderboard') {
+      const isLast = room.currentQuestion >= room.questions.length - 1;
+      io.to(pin).emit('show:leaderboard', { leaderboard: getLeaderboard(room), isLast });
+    } else {
+      io.to(pin).emit('qna:ended', {});
+    }
   });
 
   socket.on('disconnect', () => {

@@ -49,13 +49,20 @@
       <div id="question-list" class="question-list"></div>
     </div>
 
+    <div class="host-actions-row">
+      <button id="btn-slide-lobby" class="btn btn-outline">📋 Insert Slide</button>
+      <button id="btn-qna-lobby"   class="btn btn-outline">💬 Start Q&A</button>
+    </div>
     <button id="btn-start" class="btn btn-primary btn-lg">Start Quiz</button>
   </div>
 
   <!-- Question (host view) -->
   <div id="screen-question" class="screen">
     <div class="question-header">
-      <span id="q-counter" class="q-counter"></span>
+      <div class="q-header-top">
+        <span id="q-counter" class="q-counter"></span>
+        <span id="q-timer-text" class="timer-text">—</span>
+      </div>
       <div class="timer-bar"><div id="q-timer-fill" class="timer-fill"></div></div>
     </div>
     <h2 id="q-text" class="question-text"></h2>
@@ -68,6 +75,10 @@
   <div id="screen-leaderboard" class="screen">
     <h2>Leaderboard</h2>
     <div id="leaderboard-list" class="leaderboard"></div>
+    <div class="host-actions-row">
+      <button id="btn-slide-lb" class="btn btn-outline">📋 Insert Slide</button>
+      <button id="btn-qna-lb"   class="btn btn-outline">💬 Start Q&A</button>
+    </div>
     <button id="btn-next" class="btn btn-primary btn-lg">Next Question</button>
   </div>
 
@@ -75,6 +86,35 @@
   <div id="screen-gameover" class="screen">
     <h2>Final Scores</h2>
     <div id="final-leaderboard" class="leaderboard"></div>
+    <button id="btn-restart" class="btn btn-restart btn-lg">▶ Start New Match</button>
+  </div>
+
+  <!-- Slide form (host fills in title + body) -->
+  <div id="screen-slide-form" class="screen">
+    <h2>Insert Slide</h2>
+    <input id="sf-title" type="text" class="input" placeholder="Slide title" maxlength="120" />
+    <textarea id="sf-body" class="input input-textarea" placeholder="Slide body text (optional)" rows="5"></textarea>
+    <p id="sf-error" class="error-msg"></p>
+    <div class="host-actions-row">
+      <button id="btn-slide-cancel" class="btn btn-outline">Cancel</button>
+      <button id="btn-slide-show"   class="btn btn-primary">Show Slide Now</button>
+    </div>
+  </div>
+
+  <!-- Slide active (host view — mirrors presenter) -->
+  <div id="screen-slide-host" class="screen">
+    <p class="hint">Slide is live on the presenter screen</p>
+    <h2 id="slide-title-host"  class="slide-title"></h2>
+    <p  id="slide-body-host"   class="slide-body"></p>
+    <button id="btn-close-slide" class="btn btn-secondary btn-lg">Close Slide</button>
+  </div>
+
+  <!-- Q&A session (host view) -->
+  <div id="screen-qna-host" class="screen">
+    <h2>Q&amp;A Session</h2>
+    <p class="hint">Participants can submit questions</p>
+    <div id="qna-list-host" class="qna-list"></div>
+    <button id="btn-end-qna" class="btn btn-secondary btn-lg">End Q&amp;A</button>
   </div>
 
 </div>
